@@ -1,0 +1,39 @@
+name: windows
+
+on: push
+
+jobs:
+  python:
+    strategy:
+      matrix:
+        arch: ["32", "64"]
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          submodules: false
+      - name: prepare python
+        run: |
+          python get_python_ps1.py 3.9.5 ${{ matrix.arch }}
+          ./get_python_3.9.5_${{ matrix.arch }}.ps1
+        # run: |
+        #   Invoke-WebRequest -Uri "https://www.python.org/ftp/python/3.9.5/python-3.9.5-amd64.exe" -OutFile .\python.exe
+        #   .\python.exe /passive /uninstall | Wait-Job
+        #   New-Item -Path . -Name python-install -ItemType "directory"
+        #   $InstallPath = (Resolve-Path -Path .\python-install).Path
+        #   .\python.exe /passive InstallAllUsers=0 Include_doc=0 Include_test=0 PrependPath=1 "TargetDir=$InstallPath" | Wait-Job
+        #   Copy-Item -Path C:\Windows\py.exe -Destination $InstallPath\py.exe
+        #   Copy-Item -Path C:\Windows\pyw.exe -Destination $InstallPath\pyw.exe
+        #   Copy-Item -Path C:\Windows\pyshellext.amd64.dll -Destination $InstallPath\pyshellext.amd64.dll
+        #   Compress-Archive -Path $InstallPath\* -DestinationPath .\python-3.9.5.win64.zip
+      - name: publish to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_name: xq114/appveyor-hello
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: python-3.9.5.win${{ matrix.arch }}.zip
+          asset_name: python-3.9.5.win${{ matrix.arch }}.zip
+          tag: "3.9.5"
+          body: "python for windows 3.9.5"
