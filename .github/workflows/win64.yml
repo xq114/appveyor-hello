@@ -14,16 +14,16 @@ jobs:
         with:
           fetch-depth: 0
           submodules: false
-      - name: prepare python
+      - name: prepare llvm
         run: |
-          python get_python_ps1.py 3.7.9 ${{ matrix.arch }}
-          ./get_python_3.7.9_${{ matrix.arch }}.ps1
+          python get_llvm_ps1.py 14.0.0 ${{ matrix.arch }}
+          ./get_llvm_14.0.0_${{ matrix.arch }}.ps1
       - name: publish to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_name: xq114/appveyor-hello
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: python-3.7.9.win${{ matrix.arch }}.zip
-          asset_name: python-3.7.9.win${{ matrix.arch }}.zip
-          tag: "3.7.9"
-          body: "python for windows 3.7.9"
+          file: clang+llvm-14.0.0-win${{ matrix.arch }}.zip
+          asset_name: clang+llvm-14.0.0-win${{ matrix.arch }}.zip
+          tag: "14.0.0"
+          body: "llvm for windows 14.0.0"
