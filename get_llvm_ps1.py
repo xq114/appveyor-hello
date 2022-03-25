@@ -7,7 +7,7 @@ $InstallPath = (Resolve-Path -Path .\llvm-install).Path
 Invoke-WebRequest -Uri "https://github.com/llvm/llvm-project/releases/download/llvmorg-{llvmver}/LLVM-{llvmver}-win{bits}.exe" -OutFile .\llvm.exe
 .\llvm.exe /S /D=$InstallPath | Wait-Job
 
-Compress-Archive -Path $InstallPath -DestinationPath .\clang+llvm-{llvmver}-win{arch}.zip
+Compress-Archive -Path $InstallPath -DestinationPath .\clang+llvm-{llvmver}-win{bits}.zip
 """
 
 if __name__ == '__main__':
