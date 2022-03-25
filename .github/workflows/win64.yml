@@ -3,10 +3,11 @@ name: windows
 on: push
 
 jobs:
-  python:
+  llvm:
     strategy:
       matrix:
         arch: ["32", "64"]
+        version: ["11.0.0"]
     runs-on: windows-latest
     steps:
       - name: checkout
@@ -16,14 +17,14 @@ jobs:
           submodules: false
       - name: prepare llvm
         run: |
-          python get_llvm_ps1.py 14.0.0 ${{ matrix.arch }}
-          ./get_llvm_14.0.0_${{ matrix.arch }}.ps1
+          python get_llvm_ps1.py ${{ matrix.version }} ${{ matrix.arch }}
+          ./get_llvm_${{ matrix.version }}_${{ matrix.arch }}.ps1
       - name: publish to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_name: xq114/appveyor-hello
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: clang+llvm-14.0.0-win${{ matrix.arch }}.zip
-          asset_name: clang+llvm-14.0.0-win${{ matrix.arch }}.zip
-          tag: "14.0.0"
-          body: "llvm for windows 14.0.0"
+          file: clang+llvm-${{ matrix.version }}-win${{ matrix.arch }}.zip
+          asset_name: clang+llvm-${{ matrix.version }}-win${{ matrix.arch }}.zip
+          tag: "${{ matrix.version }}"
+          body: "llvm for windows ${{ matrix.version }}"
